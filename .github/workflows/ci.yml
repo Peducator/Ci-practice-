@@ -59,3 +59,17 @@ jobs:
 
       - name: Quét SAST
         run: semgrep scan --config p/default --metrics=off --error
+  ci-ok:
+    name: CI OK
+    if: always()
+    needs: [lint, test, docker]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Kiểm tra kết quả các job
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "Kết quả: $RESULTS"
+          case "$RESULTS" in
+            *failure*|*cancelled*) exit 1 ;;
+          esac
