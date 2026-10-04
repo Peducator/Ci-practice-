@@ -27,6 +27,24 @@ jobs:
 
       - run: npm run lint
 
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
   docker:
     name: Docker build
     runs-on: ubuntu-24.04
@@ -45,7 +63,7 @@ jobs:
           tags: ci-practice:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-  
+
   semgrep:
     name: Semgrep
     runs-on: ubuntu-24.04
@@ -59,6 +77,7 @@ jobs:
 
       - name: Quét SAST
         run: semgrep scan --config p/default --metrics=off --error
+
   ci-ok:
     name: CI OK
     if: always()
