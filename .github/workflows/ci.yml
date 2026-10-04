@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -26,3 +26,22 @@ jobs:
       - run: npm ci
 
       - run: npm run lint
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: false
+          tags: ci-practice:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
