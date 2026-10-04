@@ -62,7 +62,7 @@ jobs:
   ci-ok:
     name: CI OK
     if: always()
-    needs: [lint, test, docker]
+    needs: [lint, test, docker, semgrep]
     runs-on: ubuntu-24.04
     steps:
       - name: Kiểm tra kết quả các job
