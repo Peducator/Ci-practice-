@@ -26,3 +26,22 @@ jobs:
       - run: npm ci
 
       - run: npm run lint
+    
+    docker:
+    name: Docker build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@<major>
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-buildx-action@<major>
+
+      - uses: docker/build-push-action@<major>
+        with:
+          context: .
+          push: false
+          tags: ci-practice:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
