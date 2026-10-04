@@ -45,3 +45,17 @@ jobs:
           tags: ci-practice:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  
+  semgrep:
+    name: Semgrep
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Quét SAST
+        run: semgrep scan --config p/default --metrics=off --error
