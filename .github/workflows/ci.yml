@@ -78,10 +78,24 @@ jobs:
       - name: Quét SAST
         run: semgrep scan --config p/default --metrics=off --error
 
+  gitleaks:
+    name: Gitleaks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@<sha> # giữ cùng SHA với các job khác
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: gitleaks/gitleaks-action@<sha> # vX.Y.Z
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   ci-ok:
     name: CI OK
     if: always()
-    needs: [lint, test, docker, semgrep]
+    needs: [lint, test, docker, semgrep, gitleaks]
     runs-on: ubuntu-24.04
     steps:
       - name: Kiểm tra kết quả các job
