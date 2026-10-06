@@ -88,7 +88,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: gitleaks/gitleaks-action@2ca41cc1372d1e939a6a879f18cdc19fc1cac1ce # vX.Y.Z
+      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # vX.Y.Z
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
